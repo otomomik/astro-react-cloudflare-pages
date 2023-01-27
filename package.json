@@ -9,7 +9,16 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "wrangler pages dev ./dist --compatibility-flags=streams_enable_constructors",
-    "astro": "astro"
+    "astro": "astro",
+    "eslint": "eslint . --ignore-path .gitignore",
+    "eslint:fix": "yarn eslint --fix",
+    "fmt": "prettier --check .",
+    "fmt:fix": "prettier --write .",
+    "lint": "yarn eslint && yarn fmt",
+    "lint:fix": "yarn eslint:fix && yarn fmt:fix",
+    "tsc": "tsc --noEmit",
+    "ci": "yarn lint && yarn tsc",
+    "prepare": "husky install"
   },
   "dependencies": {
     "astro": "^2.0.2",
@@ -21,6 +30,19 @@
     "@astrojs/react": "^2.0.1",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-config-standard-with-typescript": "^33.0.0",
+    "eslint-plugin-astro": "^0.23.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "husky": "^8.0.3",
+    "prettier": "^2.8.3",
+    "prettier-plugin-astro": "^0.8.0",
+    "typescript": "*",
     "wrangler": "^2.8.1"
   }
 }
