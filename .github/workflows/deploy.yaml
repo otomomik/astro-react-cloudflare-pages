@@ -9,16 +9,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: marocchino/tool-versions-action@v1
+        id: versions
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: "16.16.0"
+          node-version: ${{ steps.versions.outputs.nodejs}}
       - run: yarn
-      - run: yarn ci
+      - run: yarn build
+      - run: node -p -e '`NAME=${require("./package.json").version}`' >> $GITHUB_ENV
+      - uses: cloudflare/wrangler-action@2.0.0
+        with:
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          command: pages publish dist --project-name="${{ env.NAME }}" --commit-message "Deploy"
       - run: node -p -e '`VERSION=${require("./package.json").version}`' >> $GITHUB_ENV
-        if: github.ref == 'refs/heads/main'
       - uses: pkgdeps/git-tag-action@v2
-        if: github.ref == 'refs/heads/main'
         with:
           version: ${{ env.VERSION }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
